@@ -1,0 +1,179 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "lib-pwa": {
+      "projectType": "library",
+      "root": "projects/lib-pwa",
+      "sourceRoot": "projects/lib-pwa/src",
+      "prefix": "pwa",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/lib-pwa/tsconfig.lib.json",
+            "project": "projects/lib-pwa/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/lib-pwa/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/lib-pwa/src/test.ts",
+            "tsConfig": "projects/lib-pwa/tsconfig.spec.json",
+            "karmaConfig": "projects/lib-pwa/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/lib-pwa/tsconfig.lib.json",
+              "projects/lib-pwa/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "app-pwa": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/app-pwa",
+      "sourceRoot": "projects/app-pwa/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/app-pwa",
+            "index": "projects/app-pwa/src/index.html",
+            "main": "projects/app-pwa/src/main.ts",
+            "polyfills": "projects/app-pwa/src/polyfills.ts",
+            "tsConfig": "projects/app-pwa/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "projects/app-pwa/src/favicon.ico",
+              "projects/app-pwa/src/assets",
+              "projects/app-pwa/src/manifest.webmanifest"
+            ],
+            "styles": [
+              "projects/app-pwa/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/app-pwa/src/environments/environment.ts",
+                  "with": "projects/app-pwa/src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "projects/lib-pwa/src/environments/environment.ts",
+                  "with": "projects/lib-pwa/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "projects/app-pwa/ngsw-config.json"
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "app-pwa:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "app-pwa:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "app-pwa:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/app-pwa/src/test.ts",
+            "polyfills": "projects/app-pwa/src/polyfills.ts",
+            "tsConfig": "projects/app-pwa/tsconfig.spec.json",
+            "karmaConfig": "projects/app-pwa/karma.conf.js",
+            "assets": [
+              "projects/app-pwa/src/favicon.ico",
+              "projects/app-pwa/src/assets",
+              "projects/app-pwa/src/manifest.webmanifest"
+            ],
+            "styles": [
+              "projects/app-pwa/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/app-pwa/tsconfig.app.json",
+              "projects/app-pwa/tsconfig.spec.json",
+              "projects/app-pwa/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/app-pwa/e2e/protractor.conf.js",
+            "devServerTarget": "app-pwa:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "app-pwa:serve:production"
+            }
+          }
+        }
+      }
+    }},
+  "cli": {
+    "analytics": "15c4e48b-3e69-4f4c-9f7f-dd6cad1b1767"
+  },
+  "defaultProject": "lib-pwa"
+}

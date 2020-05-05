@@ -1,0 +1,12 @@
+{
+  "name": "lib-pwa",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^9.1.4",
+    "@angular/core": "^9.1.4",
+    "tslib": "^1.10.0",
+    "rxjs": "~6.5.4",
+    "@ngx-translate/core": "^12.1.2",
+    "lib-i18n": "file:../lib-i18n/dist/lib-i18n/lib-i18n-0.0.1.tgz"
+  }
+}
