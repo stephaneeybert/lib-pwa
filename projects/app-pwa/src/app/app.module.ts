@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LibPwaModule } from 'lib-pwa';
+import { EnvironmentModule } from './environment.module';
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { LibPwaModule } from 'lib-pwa';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    EnvironmentModule,
     LibPwaModule
   ],
   providers: [],

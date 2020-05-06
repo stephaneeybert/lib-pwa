@@ -15,6 +15,7 @@
     "@angular/service-worker": "~9.1.0",
     "lib-core": "file:../lib-core/dist/lib-core/lib-core-0.0.1.tgz",
     "lib-i18n": "file:../lib-i18n/dist/lib-i18n/lib-i18n-0.0.1.tgz",
+    "ng-environmenter": "^0.1.2",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

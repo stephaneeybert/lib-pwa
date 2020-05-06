@@ -1,6 +1,4 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { ServiceWorkerModule } from '@angular/service-worker';
-
 import { MaterialModule } from './material.module';
 import { PwaService } from './pwa.service';
 import { PwaPromptComponent } from './pwa-prompt.component';
@@ -10,7 +8,7 @@ import { LibI18nModule } from 'lib-i18n';
 import { LibCoreModule } from 'lib-core';
 import { BrowserModule } from '@angular/platform-browser';
 import { PwaPromptDirective } from './pwa-prompt.directive';
-import { environment } from '../environments/environment';
+import { SWModule } from './sw.module';
 
 const checkForBeforeInstallEvents: Function = (pwaService: PwaService) => () => pwaService.checkForBeforeInstallEvents();
 const pwaCheckForUpdateFactory: Function = (pwaService: PwaService) => () => pwaService.checkForAppUpdate();
@@ -22,11 +20,11 @@ const pwaCheckForUpdateFactory: Function = (pwaService: PwaService) => () => pwa
     PwaPromptComponent
   ],
   imports: [
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     MaterialModule,
     BrowserModule,
     LibI18nModule,
-    LibCoreModule
+    LibCoreModule,
+    SWModule
   ],
   exports: [
     BrowserModule,

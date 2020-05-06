@@ -79,10 +79,6 @@
                 {
                   "replace": "projects/app-pwa/src/environments/environment.ts",
                   "with": "projects/app-pwa/src/environments/environment.prod.ts"
-                },
-                {
-                  "replace": "projects/lib-pwa/src/environments/environment.ts",
-                  "with": "projects/lib-pwa/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,

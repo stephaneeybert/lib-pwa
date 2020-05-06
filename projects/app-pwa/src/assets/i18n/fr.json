@@ -1,0 +1,127 @@
+{
+  "app": {
+    "title": "MusicNG",
+    "description": "Un générateur de musique",
+    "like": "Aimer",
+    "share": "Partager",
+    "pwa": {
+      "new_version_available": "Une nouvelle version de l'application est disponible. Charger la nouvelle version ?",
+      "install": {
+        "install": "Installer",
+        "installOnDevice": "Installer sur mon appareil",
+        "installAnIcon": "Ajouter à l'écran d'accueil",
+        "iosInstructions": "Pour installer cette app web sur votre appareil veuillez taper sur le bouton Menu et ensuite sur le bouton Ajouter à l'écran d'accueil",
+        "close": "Fermer"
+      }
+    }
+  },
+  "menu": {
+    "soundtrack": "Musique",
+    "soundtrack.description": "Le générateur de musique",
+    "device": "Appareils",
+    "device.description": "Les appareils branchés",
+    "users": "Utilisateurs",
+    "users.description": "Les utilisateurs",
+    "login": "Connexion",
+    "login.description": "Me connecter à l'application",
+    "logout": "Déconnexion",
+    "logout.description": "Me déconnecter de l'application"
+  },
+  "header": {
+    "home": "Home",
+    "users": "Utilisateurs",
+    "logout": "Déconnexion",
+    "music": "Musique",
+    "soundtrack": "Musique",
+    "device": "Appareils",
+    "settings": "Paramètres"
+  },
+  "settings": {
+    "form": {
+      "title": "Paramètres",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "animatedStave": "Animated stave"
+    },
+    "message": {
+      "saved": "Les paramètres ont été enregistré."
+    }
+  },
+  "soundtracks": {
+    "assignedName": "Morceau",
+    "add": {
+      "tooltip": "Ajouter un nouveau morceau"
+    },
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "play": "Jouer",
+    "stop": "Arreter",
+    "replay": "Rejouer",
+    "form": {
+      "title": "Modifier un morceau",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "name": {
+        "label": "Nom:",
+        "hint": "Le nom du morceau",
+        "error": {
+          "required": "Le nom est requis",
+          "minlength": "Le nom est trop court",
+          "maxlength": "Le nom est trop long",
+          "invalidPattern": "Pas de caractères spéciaux",
+          "nameIsAlreadyUsed": "Ce nom est déjà utilisé"
+        }
+      },
+      "copyright": "Droits d'auteur:",
+      "lyrics": "Paroles:"
+    },
+    "message": {
+      "added": "Le morceau {{ name }} a été ajouté.",
+      "maxNbReached": "Le nombre maximum de morceaux est atteint. Veuillez supprimer un morceau avant d'en ajouter un.",
+      "updated": "Le morceau {{ name }} a été modifié.",
+      "deleted": "Le morceau {{ name }} a été supprimé.",
+      "notFound": "Le morceau {{ name }} n'a pas pu être trouvé."
+    }
+
+  },
+  "devices": {
+    "title": "Appareils MIDI connectés",
+    "none": "Il n'y a pas d'appareils MIDI connectés."
+  },
+  "synth": {
+    "sound": {
+      "switchOn": "Allumer le son"
+    }
+  },
+  "sheet": {
+    "error": {
+      "noSheetDrawing": "Le dessin des partitions n'est plus possible."
+    }
+  },
+  "user": {
+    "form": {
+      "title": "Créer ou mettre à jour un utilisateur",
+      "email": "Email",
+      "firstname": "Prénom",
+      "lastname": "Nom",
+      "save": "Enregistrer",
+      "cancel": "Annuler"
+    }
+  },
+  "message": {
+    "error": {
+      "reloadApp": "Veuillez recharger l'application."
+    }
+  },
+  "toast": {
+    "close": "Fermer"
+  },
+  "PAGINATOR": {
+    "ITEMS_PER_PAGE": "Eléments par page:",
+    "NEXT_PAGE": "Page suivante",
+    "PREVIOUS_PAGE": "Page précédente",
+    "FIRST_PAGE": "Première page",
+    "LAST_PAGE": "Dernière page",
+    "OUT_OF": "sur"
+  }
+}
