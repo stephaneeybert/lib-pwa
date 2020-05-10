@@ -6,7 +6,7 @@ import { take } from 'rxjs/operators';
 import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { PwaPromptComponent } from './pwa-prompt.component';
-import { ScreenDeviceService } from 'lib-core';
+import { ScreenDeviceService } from '@stephaneeybert/lib-core';
 
 const PROMPT_DELAY: number = 3000;
 const PLATFORM_ANDROID: 'android' = 'android';

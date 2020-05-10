@@ -1,7 +1,7 @@
 import { Directive, HostListener, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { PwaService } from './pwa.service';
 import { Subject, Subscription } from 'rxjs';
-import { ScreenDeviceService } from 'lib-core';
+import { ScreenDeviceService } from '@stephaneeybert/lib-core';
 
 @Directive({
   selector: '[appPwaPrompt]'
