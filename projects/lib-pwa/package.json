@@ -1,6 +1,18 @@
 {
-  "name": "lib-pwa",
+  "name": "@stephaneeybert/lib-pwa",
   "version": "0.0.1",
+  "description": "The lib-pwa Angular library",
+  "keywords": [
+    "Angular",
+    "Library"
+  ],
+  "author": "Stephane",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stephaneeyber/lib-pwa"
+  },
+  "homepage": "https://github.com/stephaneeyber/lib-pwa#readme",
   "peerDependencies": {
     "@angular/animations": "~9.1.0",
     "@angular/cdk": "^9.2.2",
@@ -13,8 +25,8 @@
     "@angular/platform-browser-dynamic": "~9.1.0",
     "@angular/router": "~9.1.0",
     "@angular/service-worker": "~9.1.0",
-    "lib-core": "file:../lib-core/dist/lib-core/lib-core-0.0.1.tgz",
-    "lib-i18n": "file:../lib-i18n/dist/lib-i18n/lib-i18n-0.0.1.tgz",
+    "@stephaneeybert/lib-core": "0.0.1",
+    "@stephaneeybert/lib-i18n": "0.0.1",
     "ng-environmenter": "^0.1.2",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
