@@ -1,6 +1,6 @@
 {
   "name": "@stephaneeybert/lib-pwa",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The lib-pwa Angular library",
   "keywords": [
     "Angular",
@@ -25,7 +25,7 @@
     "@angular/platform-browser-dynamic": "~9.1.0",
     "@angular/router": "~9.1.0",
     "@angular/service-worker": "~9.1.0",
-    "@stephaneeybert/lib-core": "0.0.1",
+    "@stephaneeybert/lib-core": "^0.1.0",
     "@stephaneeybert/lib-i18n": "0.0.1",
     "ng-environmenter": "^0.1.2",
     "rxjs": "~6.5.4",
