@@ -1,6 +1,6 @@
 {
   "name": "lib-pwa",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The lib-pwa Angular library",
   "scripts": {
     "ng": "ng",
