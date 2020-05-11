@@ -2,6 +2,7 @@ import { Directive, HostListener, OnInit, OnDestroy, ElementRef } from '@angular
 import { PwaService } from './pwa.service';
 import { Subject, Subscription } from 'rxjs';
 import { ScreenDeviceService } from '@stephaneeybert/lib-core';
+import { delay } from 'rxjs/operators';
 
 @Directive({
   selector: '[appPwaPrompt]'
@@ -9,7 +10,8 @@ import { ScreenDeviceService } from '@stephaneeybert/lib-core';
 export class PwaPromptDirective implements OnInit, OnDestroy {
 
   private clicks = new Subject();
-  private subscription?: Subscription;
+  private clickSubscription?: Subscription;
+  private isInstallableSubscription?: Subscription;
 
   constructor(
     private elementRef: ElementRef,
@@ -18,19 +20,21 @@ export class PwaPromptDirective implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    if (!this.pwaService.isInstallable()) {
-      this.screenDeviceService.hideElement(this.elementRef);
-    }
+    this.observeAppIsInstallable();
 
-    this.subscription = this.clicks
+    // Handle a click on the element containing the directive
+    this.clickSubscription = this.clicks
     .subscribe((event: any) => {
       this.pwaService.displayPwaInstallPrompt();
     });
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+    if (this.isInstallableSubscription) {
+      this.isInstallableSubscription.unsubscribe();
+    }
+    if (this.clickSubscription) {
+      this.clickSubscription.unsubscribe();
     }
   }
 
@@ -39,6 +43,19 @@ export class PwaPromptDirective implements OnInit, OnDestroy {
     event.preventDefault();
     event.stopPropagation();
     this.clicks.next(event);
+  }
+
+  private observeAppIsInstallable(): void {
+    this.isInstallableSubscription = this.pwaService.appIsInstallable$()
+    .pipe(
+      delay(500)
+      ).subscribe((isInstallable: boolean) => {
+        if (isInstallable) {
+          this.screenDeviceService.showElement(this.elementRef);
+        } else {
+          this.screenDeviceService.hideElement(this.elementRef);
+        }
+      });
   }
 
 }

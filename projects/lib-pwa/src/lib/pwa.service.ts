@@ -1,8 +1,8 @@
 import { Platform } from '@angular/cdk/platform';
 import { Injectable, OnDestroy } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { timer, Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { timer, Subscription, Observable, interval } from 'rxjs';
+import { take, map, filter } from 'rxjs/operators';
 import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { PwaPromptComponent } from './pwa-prompt.component';
@@ -152,21 +152,38 @@ export class PwaService implements OnDestroy {
   }
 
   private receivedInstallPromptEventAndroid(): boolean {
+    console.log('PWA - Check if received install prompt event');
+    console.log(this.installPromptEvent);
     return this.installPromptEvent != null;
   }
 
-  public isInstallable(): boolean {
+  private isInStandaloneModeAndroid(): boolean {
+    console.log('PWA - Check if received install prompt event');
+    console.log(matchMedia('(display-mode: standalone)').matches);
+    return matchMedia('(display-mode: standalone)').matches;
+  }
+
+  public appIsInstallable$(): Observable<boolean> {
+    return interval(1000)
+      .pipe(
+        map((value: number) => {
+          return this.isInstallable();
+        }),
+        filter((isInstallable: boolean) => isInstallable),
+        take(1)
+      );
+  }
+
+  private isInstallable(): boolean {
+    console.log('PWA - Check if is installable');
     if (this.platform.ANDROID) {
+      console.log('PWA - Check if android is installable');
       return this.receivedInstallPromptEventAndroid() && !this.isInStandaloneModeAndroid();
     } else if (this.platform.IOS) {
       return this.isInStandaloneModeIOS();
     } else {
       return false;
     }
-  }
-
-  private isInStandaloneModeAndroid(): boolean {
-    return matchMedia('(display-mode: standalone)').matches;
   }
 
   private isInStandaloneModeIOS(): boolean {
