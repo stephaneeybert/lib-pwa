@@ -75,10 +75,13 @@ export class PwaService implements OnDestroy {
       console.log('PWA - Is on Android and is not standalone: ' + !this.isInStandaloneModeAndroid());
       if (!this.isInStandaloneModeAndroid()) {
         console.log('PWA - Listening on the install prompt event on Android');
-        window.addEventListener('beforeinstallprompt', this.handleBbeforeInstallAndroid);
-        window.addEventListener('appinstalled', this.handleAlreadyInstalledAndroid);
-        self.addEventListener('install', this.handleServiceWorkerInstallEvent);
-        self.addEventListener('fetch', this.handleServiceWorkerFetchEvent);
+        // Explicitly bind the service instance this reference to the handler
+        // as the default this keyword in event handler functions references
+        // the DOM window and not the class instance
+        window.addEventListener('beforeinstallprompt', this.handleBbeforeInstallAndroid.bind(this));
+        window.addEventListener('appinstalled', this.handleAlreadyInstalledAndroid.bind(this));
+        self.addEventListener('install', this.handleServiceWorkerInstallEvent.bind(this));
+        self.addEventListener('fetch', this.handleServiceWorkerFetchEvent.bind(this));
       }
     } else if (this.platform.IOS) {
     } else {
