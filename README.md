@@ -2,7 +2,7 @@
 
 # Bump the version
 cd projects/lib-pwa/;
-npm version minor;
+npm version patch;
 cd ../../;
 # TODO Do I need to copy the version number in the parent package.json file as well ?
 
