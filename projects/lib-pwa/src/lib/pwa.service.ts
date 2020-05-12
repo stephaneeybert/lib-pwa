@@ -164,7 +164,7 @@ export class PwaService implements OnDestroy {
   }
 
   public appIsInstallable$(): Observable<boolean> {
-    return interval(1000)
+    return interval(5000)
       .pipe(
         map((value: number) => {
           return this.isInstallable();
