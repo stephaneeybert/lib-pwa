@@ -11,7 +11,7 @@ export class PwaPromptDirective implements OnInit, OnDestroy {
 
   private clicks = new Subject();
   private clickSubscription?: Subscription;
-  private isInstallableSubscription?: Subscription;
+  private isPromptableForInstallationSubscription?: Subscription;
 
   constructor(
     private elementRef: ElementRef,
@@ -30,8 +30,8 @@ export class PwaPromptDirective implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.isInstallableSubscription) {
-      this.isInstallableSubscription.unsubscribe();
+    if (this.isPromptableForInstallationSubscription) {
+      this.isPromptableForInstallationSubscription.unsubscribe();
     }
     if (this.clickSubscription) {
       this.clickSubscription.unsubscribe();
@@ -46,7 +46,7 @@ export class PwaPromptDirective implements OnInit, OnDestroy {
   }
 
   private observeAppIsInstallable(): void {
-    this.isInstallableSubscription = this.pwaService.appIsInstallable$()
+    this.isPromptableForInstallationSubscription = this.pwaService.isPromptableForInstallation$()
     .pipe(
       delay(500)
       ).subscribe((isInstallable: boolean) => {

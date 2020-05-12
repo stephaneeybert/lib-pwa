@@ -7,8 +7,9 @@ import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { PwaPromptComponent } from './pwa-prompt.component';
 import { ScreenDeviceService } from '@stephaneeybert/lib-core';
+import { Environmenter } from 'ng-environmenter';
 
-const PROMPT_DELAY: number = 3000;
+const PROMPT_DELAY: number = 10000;
 const PLATFORM_ANDROID: 'android' = 'android';
 const PLATFORM_IOS: 'ios' = 'ios';
 
@@ -31,6 +32,8 @@ export class PwaService implements OnDestroy {
     private platform: Platform,
     private swUpdate: SwUpdate,
     private screenDeviceService: ScreenDeviceService,
+    private translateService: TranslateService,
+    private environmenter: Environmenter
   ) {
     if (pwaService) {
       throw new Error('The PWA service has ALREADY been injected.');
@@ -95,13 +98,16 @@ export class PwaService implements OnDestroy {
     // Keep the install prompt event for latter use
     this.installPromptEvent = event;
     console.log('PWA - Received and saved the install prompt event on Android');
+    if (this.isInstallable() && this.isDisplayedAutomatically()) {
+      this.autoDisplayPwaInstallPrompt();
+    }
   }
 
-  private openPwaPromptComponent(mobileType: 'ios' | 'android'): void {
+  private autoDisplayPwaInstallPrompt(): void {
     this.pwaPromptForInstallSubscription = timer(PROMPT_DELAY)
       .pipe(take(1))
       .subscribe(() => {
-        this.openBottomSheet(mobileType);
+        this.displayPwaInstallPrompt();
       });
   }
 
@@ -162,24 +168,32 @@ export class PwaService implements OnDestroy {
   private receivedInstallPromptEventAndroid(): boolean {
     console.log('PWA - Check if received install prompt event');
     console.log(this.installPromptEvent);
+    console.log(this.installPromptEvent != null);
     return this.installPromptEvent != null;
   }
 
   private isInStandaloneModeAndroid(): boolean {
-    console.log('PWA - Check if received install prompt event');
+    console.log('PWA - Check if in standalone mode');
     console.log(matchMedia('(display-mode: standalone)').matches);
     return matchMedia('(display-mode: standalone)').matches;
   }
 
-  public appIsInstallable$(): Observable<boolean> {
-    return interval(5000)
+  public isPromptableForInstallation$(): Observable<boolean> {
+    return interval(PROMPT_DELAY)
       .pipe(
+        take(1),
         map((value: number) => {
-          return this.isInstallable();
+          console.log('PWA - Is promptable for installation ? ' + this.isInstallable() && !this.isDisplayedAutomatically());
+          return this.isInstallable() && !this.isDisplayedAutomatically();
         }),
         filter((isInstallable: boolean) => isInstallable),
         take(1)
       );
+  }
+
+  private isDisplayedAutomatically(): boolean {
+    console.log('PWA - Is displayed automatically ? ' + this.environmenter.getGlobalEnvironment().environment.pwaInstallPromptAutoDisplay);
+    return this.environmenter.getGlobalEnvironment().environment.pwaInstallPromptAutoDisplay;
   }
 
   private isInstallable(): boolean {

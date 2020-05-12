@@ -9,14 +9,14 @@ import { Observable } from 'rxjs';
 })
 export class PwaPromptIconComponent implements OnInit {
 
-  appIsInstallable$?: Observable<boolean>;
+  isPromptableForInstallation$?: Observable<boolean>;
 
   constructor(
     private pwaService: PwaService
   ) { }
 
   ngOnInit() {
-    this.appIsInstallable$ = this.pwaService.appIsInstallable$();
+    this.isPromptableForInstallation$ = this.pwaService.isPromptableForInstallation$();
   }
 
   public displayPwaInstallPrompt(): void {
