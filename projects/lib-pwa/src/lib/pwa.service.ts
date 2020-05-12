@@ -1,5 +1,5 @@
 import { Platform } from '@angular/cdk/platform';
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, SkipSelf, Optional } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { timer, Subscription, Observable, interval } from 'rxjs';
 import { take, map, filter } from 'rxjs/operators';
@@ -25,12 +25,17 @@ export class PwaService implements OnDestroy {
   private pwaCheckForUpdateSubscription?: Subscription;
 
   constructor(
+    // Ensure the service is injected only once
+    @Optional() @SkipSelf() pwaService: PwaService,
     private matBottomSheet: MatBottomSheet,
     private platform: Platform,
     private swUpdate: SwUpdate,
     private screenDeviceService: ScreenDeviceService,
-    private translateService: TranslateService
-  ) { }
+  ) {
+    if (pwaService) {
+      throw new Error('The PWA service has ALREADY been injected.');
+    }
+  }
 
   ngOnDestroy() {
     if (this.pwaPromptForInstallSubscription != null) {
