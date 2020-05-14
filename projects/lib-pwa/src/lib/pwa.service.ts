@@ -8,7 +8,7 @@ import { PwaPromptComponent } from './pwa-prompt.component';
 import { ScreenDeviceService } from '@stephaneeybert/lib-core';
 import { Environmenter } from 'ng-environmenter';
 
-const PROMPT_DELAY: number = 10000;
+const PROMPT_DELAY: number = 3000;
 const PLATFORM_ANDROID: 'android' = 'android';
 const PLATFORM_IOS: 'ios' = 'ios';
 
@@ -107,7 +107,7 @@ export class PwaService implements OnDestroy {
     console.log('PWA - In autoDisplayPwaInstallPrompt');
     if (this.isInstallable() && this.isDisplayedAutomatically()) {
       this.pwaPromptForInstallSubscription = timer(PROMPT_DELAY)
-      .pipe(take(1))
+        take(10)
       .subscribe(() => {
         this.displayPwaInstallPrompt(i18nCancel, i18nInstall, i18nIOSInstructions);
       });
@@ -190,9 +190,10 @@ export class PwaService implements OnDestroy {
   }
 
   public isPromptableForInstallation$(): Observable<boolean> {
+    console.log('PWA - In isPromptableForInstallation');
     return interval(PROMPT_DELAY)
       .pipe(
-        take(1),
+        take(10),
         map((value: number) => {
           console.log('PWA - Is promptable for installation ? ' + this.isInstallable() && !this.isDisplayedAutomatically());
           return this.isInstallable() && !this.isDisplayedAutomatically();
