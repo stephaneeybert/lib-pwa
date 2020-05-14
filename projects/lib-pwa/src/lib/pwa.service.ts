@@ -107,7 +107,9 @@ export class PwaService implements OnDestroy {
     console.log('PWA - In autoDisplayPwaInstallPrompt');
     if (this.isInstallable() && this.isDisplayedAutomatically()) {
       this.pwaPromptForInstallSubscription = timer(PROMPT_DELAY)
+      .pipe(
         take(10)
+      )
       .subscribe(() => {
         this.displayPwaInstallPrompt(i18nCancel, i18nInstall, i18nIOSInstructions);
       });
@@ -198,7 +200,10 @@ export class PwaService implements OnDestroy {
           console.log('PWA - Is promptable for installation ? ' + this.isInstallable() && !this.isDisplayedAutomatically());
           return this.isInstallable() && !this.isDisplayedAutomatically();
         }),
+        filter((isPromptable: boolean) => {
           console.log('PWA - returning isPromptable: ' + isPromptable);
+          return isPromptable;
+        })
       );
   }
 
