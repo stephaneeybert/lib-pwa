@@ -4,7 +4,7 @@ import { Subject, Subscription } from 'rxjs';
 import { ScreenDeviceService } from '@stephaneeybert/lib-core';
 
 @Directive({
-  selector: '[appPwaPrompt]'
+  selector: '[appPwaPrompt]' // TODO Why the brackets are not used by the client app ?
 })
 export class PwaPromptDirective implements OnInit, OnDestroy {
 
@@ -49,11 +49,14 @@ export class PwaPromptDirective implements OnInit, OnDestroy {
   }
 
   private isPromptableForInstallation(): void {
+    this.screenDeviceService.hideElement(this.elementRef);
     this.isPromptableForInstallationSubscription = this.pwaService.isPromptableForInstallation$()
     .subscribe((isPromptable: boolean) => {
       if (isPromptable) {
+        console.log('PWA - Showing directive element');
         this.screenDeviceService.showElement(this.elementRef);
       } else {
+        console.log('PWA - Hiding directive element');
         this.screenDeviceService.hideElement(this.elementRef);
       }
     });

@@ -2,13 +2,14 @@ import { Platform } from '@angular/cdk/platform';
 import { Injectable, OnDestroy, SkipSelf, Optional } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { timer, Subscription, Observable, interval } from 'rxjs';
-import { take, map, filter } from 'rxjs/operators';
+import { take, map } from 'rxjs/operators';
 import { SwUpdate } from '@angular/service-worker';
 import { PwaPromptComponent } from './pwa-prompt.component';
 import { ScreenDeviceService } from '@stephaneeybert/lib-core';
 import { Environmenter } from 'ng-environmenter';
 
-const PROMPT_DELAY: number = 3000;
+const CHECK_FOR_INSTALL_DELAY: number = 5000;
+const OFFER_TO_INSTALL_DELAY: number = 15000;
 const PLATFORM_ANDROID: 'android' = 'android';
 const PLATFORM_IOS: 'ios' = 'ios';
 
@@ -56,7 +57,6 @@ export class PwaService implements OnDestroy {
   }
 
   public displayPwaInstallPrompt(i18nCancel: string, i18nInstall: string, i18nIOSInstructions: string) {
-    console.log('PWA - Is not standalone app yet');
     if (this.platform.ANDROID) {
       if (!this.isInStandaloneModeAndroid()) {
         console.log('PWA - Opening the propt install on Android');
@@ -76,9 +76,7 @@ export class PwaService implements OnDestroy {
   }
 
   public checkForBeforeInstallEvents(): void {
-    console.log('PWA - In checkForBeforeInstallEvents');
     if (this.platform.ANDROID) {
-      console.log('PWA - Is on Android and is not standalone: ' + !this.isInStandaloneModeAndroid());
       if (!this.isInStandaloneModeAndroid()) {
         console.log('PWA - Listening on the install prompt event on Android');
         // Explicitly bind the service instance this reference to the handler
@@ -104,16 +102,15 @@ export class PwaService implements OnDestroy {
   }
 
   public autoDisplayPwaInstallPrompt(i18nCancel: string, i18nInstall: string, i18nIOSInstructions: string): void {
-    console.log('PWA - In autoDisplayPwaInstallPrompt');
-    if (this.isInstallable() && this.isDisplayedAutomatically()) {
-      this.pwaPromptForInstallSubscription = timer(PROMPT_DELAY)
-      .pipe(
-        take(10)
-      )
-      .subscribe(() => {
+    this.pwaPromptForInstallSubscription = timer(OFFER_TO_INSTALL_DELAY)
+    .pipe(
+      take(1)
+    )
+    .subscribe(() => {
+      if (this.isInstallable() && this.isDisplayedAutomatically()) {
         this.displayPwaInstallPrompt(i18nCancel, i18nInstall, i18nIOSInstructions);
-      });
-    }
+      }
+    });
   }
 
   // Called if the application if already installed
@@ -123,8 +120,10 @@ export class PwaService implements OnDestroy {
     console.log(this.alreadyInstalledEvent);
   }
 
+  // TODO Do I need this method ?
   // Called when the service worker receives an install event
   private handleServiceWorkerInstallEvent(event: any): void {
+    console.log('PWA - In handleServiceWorkerInstallEvent');
     event.waitUntil(
       caches.open('v1').then(function(cache) {
         console.log('PWA - Caching custom resources for the service worker');
@@ -139,6 +138,7 @@ export class PwaService implements OnDestroy {
   // Called when the service worker receives a fetch event
   // Listening to the fetch event is a prerequisite to receiving the beforeinstallprompt event from the browser
   private handleServiceWorkerFetchEvent(event: any): void {
+    console.log('PWA - In handleServiceWorkerFetchEvent');
     event.respondWith(
       caches.match(event.request).then(function(response) {
         if (response) {
@@ -176,46 +176,36 @@ export class PwaService implements OnDestroy {
   }
 
   private openBottomSheet(bottomSheetRef: MatBottomSheetRef): void {
-    this.afterDismissedSubscription = bottomSheetRef.afterDismissed().subscribe(() => {
+    this.afterDismissedSubscription = bottomSheetRef.afterDismissed()
+    .subscribe(() => {
       console.log('PWA - The bottom sheet has been dismissed.');
     });
   }
 
   private receivedInstallPromptEventAndroid(): boolean {
-    console.log('PWA - Check if received install prompt event');
     return this.installPromptEvent != null;
   }
 
   private isInStandaloneModeAndroid(): boolean {
-    console.log('PWA - Check if in standalone mode ' + matchMedia('(display-mode: standalone)').matches);
     return matchMedia('(display-mode: standalone)').matches;
   }
 
   public isPromptableForInstallation$(): Observable<boolean> {
-    console.log('PWA - In isPromptableForInstallation');
-    return interval(PROMPT_DELAY)
+    return interval(CHECK_FOR_INSTALL_DELAY)
       .pipe(
-        take(10),
+        take(3),
         map((value: number) => {
-          console.log('PWA - Is promptable for installation ? ' + this.isInstallable() && !this.isDisplayedAutomatically());
           return this.isInstallable() && !this.isDisplayedAutomatically();
-        }),
-        filter((isPromptable: boolean) => {
-          console.log('PWA - returning isPromptable: ' + isPromptable);
-          return isPromptable;
         })
       );
   }
 
   private isDisplayedAutomatically(): boolean {
-    console.log('PWA - Is displayed automatically ? ' + this.environmenter.getGlobalEnvironment().environment.pwaInstallPromptAutoDisplay);
     return this.environmenter.getGlobalEnvironment().environment.pwaInstallPromptAutoDisplay;
   }
 
   private isInstallable(): boolean {
-    console.log('PWA - Check if is installable');
     if (this.platform.ANDROID) {
-      console.log('PWA - Check if android is installable');
       return this.receivedInstallPromptEventAndroid() && !this.isInStandaloneModeAndroid();
     } else if (this.platform.IOS) {
       return this.isInStandaloneModeIOS();
@@ -229,16 +219,13 @@ export class PwaService implements OnDestroy {
   }
 
   public checkForAppUpdate(i18nNewVersionAvailable: string): void {
-    console.log('PWA - In checkForAppUpdate');
     if (this.swUpdate.isEnabled) {
-      console.log('PWA - Update is enabled');
       this.pwaCheckForUpdateSubscription = this.swUpdate.available
-        .subscribe(() => {
-          console.log('PWA - Offering a new version');
-          if (confirm(i18nNewVersionAvailable)) {
-            this.screenDeviceService.reloadPage();
-          }
-        });
+      .subscribe(() => {
+        if (confirm(i18nNewVersionAvailable)) {
+          this.screenDeviceService.reloadPage();
+        }
+      });
     }
   }
 
