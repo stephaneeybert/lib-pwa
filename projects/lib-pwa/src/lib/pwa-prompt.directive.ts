@@ -1,13 +1,16 @@
-import { Directive, HostListener, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Directive, HostListener, OnInit, OnDestroy, ElementRef, Input } from '@angular/core';
 import { PwaService } from './pwa.service';
 import { Subject, Subscription } from 'rxjs';
 import { ScreenDeviceService } from '@stephaneeybert/lib-core';
-import { delay } from 'rxjs/operators';
 
 @Directive({
   selector: '[appPwaPrompt]'
 })
 export class PwaPromptDirective implements OnInit, OnDestroy {
+
+  @Input() i18nCancel: string = '';
+  @Input() i18nInstall: string = '';
+  @Input() i18nIOSInstructions: string = '';
 
   private clicks = new Subject();
   private clickSubscription?: Subscription;
@@ -20,12 +23,12 @@ export class PwaPromptDirective implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.observeAppIsInstallable();
+    this.isPromptableForInstallation();
 
     // Handle a click on the element containing the directive
     this.clickSubscription = this.clicks
     .subscribe((event: any) => {
-      this.pwaService.displayPwaInstallPrompt();
+      this.pwaService.displayPwaInstallPrompt(this.i18nCancel, this.i18nInstall, this.i18nIOSInstructions);
     });
   }
 
@@ -45,17 +48,15 @@ export class PwaPromptDirective implements OnInit, OnDestroy {
     this.clicks.next(event);
   }
 
-  private observeAppIsInstallable(): void {
+  private isPromptableForInstallation(): void {
     this.isPromptableForInstallationSubscription = this.pwaService.isPromptableForInstallation$()
-    .pipe(
-      delay(500)
-      ).subscribe((isInstallable: boolean) => {
-        if (isInstallable) {
-          this.screenDeviceService.showElement(this.elementRef);
-        } else {
-          this.screenDeviceService.hideElement(this.elementRef);
-        }
-      });
+    .subscribe((isInstallable: boolean) => {
+      if (isInstallable) {
+        this.screenDeviceService.showElement(this.elementRef);
+      } else {
+        this.screenDeviceService.hideElement(this.elementRef);
+      }
+    });
   }
 
 }

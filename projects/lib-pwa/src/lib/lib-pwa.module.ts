@@ -3,26 +3,21 @@ import { MaterialModule } from './material.module';
 import { PwaService } from './pwa.service';
 import { PwaPromptComponent } from './pwa-prompt.component';
 import { MAT_BOTTOM_SHEET_DEFAULT_OPTIONS } from '@angular/material/bottom-sheet';
-import { PwaPromptIconComponent } from './pwa-prompt-icon.component';
-import { LibI18nModule } from '@stephaneeybert/lib-i18n';
 import { LibCoreModule } from '@stephaneeybert/lib-core';
 import { BrowserModule } from '@angular/platform-browser';
 import { PwaPromptDirective } from './pwa-prompt.directive';
 import { SWModule } from './sw.module';
 
 const checkForBeforeInstallEvents: Function = (pwaService: PwaService) => () => pwaService.checkForBeforeInstallEvents();
-const pwaCheckForUpdateFactory: Function = (pwaService: PwaService) => () => pwaService.checkForAppUpdate();
 
 @NgModule({
   declarations: [
     PwaPromptDirective,
-    PwaPromptIconComponent,
     PwaPromptComponent
   ],
   imports: [
     BrowserModule,
     MaterialModule,
-    LibI18nModule,
     LibCoreModule,
     SWModule
   ],
@@ -30,7 +25,6 @@ const pwaCheckForUpdateFactory: Function = (pwaService: PwaService) => () => pwa
     BrowserModule,
     MaterialModule,
     PwaPromptDirective,
-    PwaPromptIconComponent,
     PwaPromptComponent
   ],
   providers: [
@@ -43,12 +37,6 @@ const pwaCheckForUpdateFactory: Function = (pwaService: PwaService) => () => pwa
     {
       provide: APP_INITIALIZER,
       useFactory: checkForBeforeInstallEvents,
-      deps: [PwaService],
-      multi: true
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: pwaCheckForUpdateFactory,
       deps: [PwaService],
       multi: true
     }

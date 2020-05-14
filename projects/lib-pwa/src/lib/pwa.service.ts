@@ -4,7 +4,6 @@ import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-shee
 import { timer, Subscription, Observable, interval } from 'rxjs';
 import { take, map, filter } from 'rxjs/operators';
 import { SwUpdate } from '@angular/service-worker';
-import { TranslateService } from '@ngx-translate/core';
 import { PwaPromptComponent } from './pwa-prompt.component';
 import { ScreenDeviceService } from '@stephaneeybert/lib-core';
 import { Environmenter } from 'ng-environmenter';
@@ -20,7 +19,6 @@ export class PwaService implements OnDestroy {
 
   private installPromptEvent?: Event;
   private alreadyInstalledEvent?: Event;
-  private bottomSheetRef?: MatBottomSheetRef;
 
   private pwaPromptForInstallSubscription?: Subscription;
   private pwaCheckForUpdateSubscription?: Subscription;
@@ -32,7 +30,6 @@ export class PwaService implements OnDestroy {
     private platform: Platform,
     private swUpdate: SwUpdate,
     private screenDeviceService: ScreenDeviceService,
-    private translateService: TranslateService,
     private environmenter: Environmenter
   ) {
     if (pwaService) {
@@ -54,18 +51,20 @@ export class PwaService implements OnDestroy {
     self.removeEventListener('fetch', this.handleServiceWorkerFetchEvent);
   }
 
-  public displayPwaInstallPrompt() {
+  public displayPwaInstallPrompt(i18nCancel: string, i18nInstall: string, i18nIOSInstructions: string) {
     console.log('PWA - Is not standalone app yet');
     if (this.platform.ANDROID) {
       if (!this.isInStandaloneModeAndroid()) {
         console.log('PWA - Opening the propt install on Android');
-        this.openBottomSheet(PLATFORM_ANDROID);
+        const matBottomSheet: MatBottomSheetRef = this.createBottomSheet(PLATFORM_ANDROID, i18nCancel, i18nInstall, '');
+        this.openBottomSheet(matBottomSheet);
       }
     } else if (this.platform.IOS) {
       if (!this.isInStandaloneModeIOS()) {
         // Prevent the installation prompt when the app is already installed
         console.log('PWA - Opening the propt install on iOS');
-        this.openBottomSheet(PLATFORM_IOS);
+        const matBottomSheet: MatBottomSheetRef = this.createBottomSheet(PLATFORM_IOS, i18nCancel, '', i18nIOSInstructions);
+        this.openBottomSheet(matBottomSheet);
       }
     } else {
       console.log('PWA - The platform is not supporting PWA installation');
@@ -98,17 +97,16 @@ export class PwaService implements OnDestroy {
     // Keep the install prompt event for latter use
     this.installPromptEvent = event;
     console.log('PWA - Received and saved the install prompt event on Android');
-    if (this.isInstallable() && this.isDisplayedAutomatically()) {
-      this.autoDisplayPwaInstallPrompt();
-    }
   }
 
-  private autoDisplayPwaInstallPrompt(): void {
-    this.pwaPromptForInstallSubscription = timer(PROMPT_DELAY)
+  public autoDisplayPwaInstallPrompt(i18nCancel: string, i18nInstall: string, i18nIOSInstructions: string): void {
+    if (this.isInstallable() && this.isDisplayedAutomatically()) {
+      this.pwaPromptForInstallSubscription = timer(PROMPT_DELAY)
       .pipe(take(1))
       .subscribe(() => {
-        this.displayPwaInstallPrompt();
+        this.displayPwaInstallPrompt(i18nCancel, i18nInstall, i18nIOSInstructions);
       });
+    }
   }
 
   // Called if the application if already installed
@@ -152,15 +150,26 @@ export class PwaService implements OnDestroy {
     );
   }
 
-  private openBottomSheet(mobilePlatform: 'ios' | 'android'): void {
-    this.bottomSheetRef = this.matBottomSheet.open(PwaPromptComponent, {
-      ariaLabel: this.translateService.instant('app.pwa.install.installOnDevice'),
+  public fakeBottomSheet(): void {
+    const matBottomSheet: MatBottomSheetRef = this.createBottomSheet(PLATFORM_ANDROID, 'CANCEL', 'INSTALL', 'To install this web app on your device, tap the Menu button and the \'Add to Home screen\' button');
+    this.openBottomSheet(matBottomSheet);
+  }
+
+  private createBottomSheet(mobilePlatform: 'ios' | 'android', i18nCancel: string, i18nInstall: string, i18nIOSInstructions: string): MatBottomSheetRef {
+    return this.matBottomSheet.open(PwaPromptComponent, {
+      ariaLabel: '', // TODO I'm not sure this label is actually used
       data: {
         mobileType: mobilePlatform,
-        promptEvent: this.installPromptEvent
+        promptEvent: this.installPromptEvent,
+        i18nCancel: i18nCancel,
+        i18nInstall: i18nInstall,
+        i18nIOSInstructions: i18nIOSInstructions
       }
     });
-    this.bottomSheetRef.afterDismissed().subscribe(() => {
+  }
+
+  private openBottomSheet(bottomSheetRef: MatBottomSheetRef): void {
+    bottomSheetRef.afterDismissed().subscribe(() => {
       console.log('PWA - The bottom sheet has been dismissed.');
     });
   }
@@ -212,15 +221,14 @@ export class PwaService implements OnDestroy {
     return ('standalone' in window.navigator) && (window.navigator['standalone']);
   }
 
-  public checkForAppUpdate(): void {
+  public checkForAppUpdate(i18nNewVersionAvailable: string): void {
     console.log('PWA - In checkForAppUpdate');
     if (this.swUpdate.isEnabled) {
       console.log('PWA - Update is enabled');
       this.pwaCheckForUpdateSubscription = this.swUpdate.available
         .subscribe(() => {
           console.log('PWA - Offering a new version');
-          const appNewVersion: string = this.translateService.instant('app.pwa.new_version_available');
-          if (confirm(appNewVersion)) {
+          if (confirm(i18nNewVersionAvailable)) {
             this.screenDeviceService.reloadPage();
           }
         });

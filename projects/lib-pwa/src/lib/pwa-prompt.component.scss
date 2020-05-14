@@ -1,8 +1,5 @@
-.android-prompt {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+.fill-remaining-space {
+  flex: 1 1 auto;
 }
 
 .ios-prompt {
