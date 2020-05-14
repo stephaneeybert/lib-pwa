@@ -104,6 +104,7 @@ export class PwaService implements OnDestroy {
   }
 
   public autoDisplayPwaInstallPrompt(i18nCancel: string, i18nInstall: string, i18nIOSInstructions: string): void {
+    console.log('PWA - In autoDisplayPwaInstallPrompt');
     if (this.isInstallable() && this.isDisplayedAutomatically()) {
       this.pwaPromptForInstallSubscription = timer(PROMPT_DELAY)
       .pipe(take(1))
@@ -180,14 +181,11 @@ export class PwaService implements OnDestroy {
 
   private receivedInstallPromptEventAndroid(): boolean {
     console.log('PWA - Check if received install prompt event');
-    console.log(this.installPromptEvent);
-    console.log(this.installPromptEvent != null);
     return this.installPromptEvent != null;
   }
 
   private isInStandaloneModeAndroid(): boolean {
-    console.log('PWA - Check if in standalone mode');
-    console.log(matchMedia('(display-mode: standalone)').matches);
+    console.log('PWA - Check if in standalone mode ' + matchMedia('(display-mode: standalone)').matches);
     return matchMedia('(display-mode: standalone)').matches;
   }
 
@@ -199,8 +197,7 @@ export class PwaService implements OnDestroy {
           console.log('PWA - Is promptable for installation ? ' + this.isInstallable() && !this.isDisplayedAutomatically());
           return this.isInstallable() && !this.isDisplayedAutomatically();
         }),
-        filter((isInstallable: boolean) => isInstallable),
-        take(1)
+          console.log('PWA - returning isPromptable: ' + isPromptable);
       );
   }
 
