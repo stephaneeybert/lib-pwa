@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LibPwaModule } from 'lib-pwa';
 import { EnvironmentModule } from './environment.module';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { EnvironmentModule } from './environment.module';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    MatToolbarModule,
     AppRoutingModule,
     EnvironmentModule,
     LibPwaModule

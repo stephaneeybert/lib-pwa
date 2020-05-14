@@ -69,6 +69,7 @@
               "projects/app-pwa/src/manifest.webmanifest"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "projects/app-pwa/src/styles.scss"
             ],
             "scripts": []
@@ -136,6 +137,7 @@
               "projects/app-pwa/src/manifest.webmanifest"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "projects/app-pwa/src/styles.scss"
             ],
             "scripts": []
@@ -167,7 +169,8 @@
           }
         }
       }
-    }},
+    }
+  },
   "cli": {
     "analytics": "15c4e48b-3e69-4f4c-9f7f-dd6cad1b1767"
   },
