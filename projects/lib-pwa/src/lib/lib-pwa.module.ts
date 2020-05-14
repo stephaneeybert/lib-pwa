@@ -20,8 +20,8 @@ const pwaCheckForUpdateFactory: Function = (pwaService: PwaService) => () => pwa
     PwaPromptComponent
   ],
   imports: [
-    MaterialModule,
     BrowserModule,
+    MaterialModule,
     LibI18nModule,
     LibCoreModule,
     SWModule
