@@ -22,6 +22,7 @@ export class PwaService implements OnDestroy {
 
   private pwaPromptForInstallSubscription?: Subscription;
   private pwaCheckForUpdateSubscription?: Subscription;
+  private afterDismissedSubscription?: Subscription;
 
   constructor(
     // Ensure the service is injected only once
@@ -43,6 +44,9 @@ export class PwaService implements OnDestroy {
     }
     if (this.pwaCheckForUpdateSubscription != null) {
       this.pwaCheckForUpdateSubscription.unsubscribe();
+    }
+    if (this.afterDismissedSubscription != null) {
+      this.afterDismissedSubscription.unsubscribe();
     }
 
     window.removeEventListener('beforeinstallprompt', this.handleBbeforeInstallAndroid);
@@ -169,7 +173,7 @@ export class PwaService implements OnDestroy {
   }
 
   private openBottomSheet(bottomSheetRef: MatBottomSheetRef): void {
-    bottomSheetRef.afterDismissed().subscribe(() => {
+    this.afterDismissedSubscription = bottomSheetRef.afterDismissed().subscribe(() => {
       console.log('PWA - The bottom sheet has been dismissed.');
     });
   }
