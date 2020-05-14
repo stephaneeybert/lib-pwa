@@ -50,8 +50,8 @@ export class PwaPromptDirective implements OnInit, OnDestroy {
 
   private isPromptableForInstallation(): void {
     this.isPromptableForInstallationSubscription = this.pwaService.isPromptableForInstallation$()
-    .subscribe((isInstallable: boolean) => {
-      if (isInstallable) {
+    .subscribe((isPromptable: boolean) => {
+      if (isPromptable) {
         this.screenDeviceService.showElement(this.elementRef);
       } else {
         this.screenDeviceService.hideElement(this.elementRef);
