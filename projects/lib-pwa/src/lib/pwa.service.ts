@@ -98,7 +98,6 @@ export class PwaService implements OnDestroy {
     event.preventDefault();
     // Keep the install prompt event for latter use
     this.installPromptEvent = event;
-    console.log('PWA - Received and saved the install prompt event on Android');
   }
 
   public autoDisplayPwaInstallPrompt(i18nCancel: string, i18nInstall: string, i18nIOSInstructions: string): void {
@@ -115,8 +114,9 @@ export class PwaService implements OnDestroy {
 
   // Called if the application if already installed
   private handleAlreadyInstalledAndroid(event: Event): void {
+    console.log('PWA - In handleAlreadyInstalledAndroid');
+    console.log(event);
     this.alreadyInstalledEvent = event;
-    console.log('PWA - The application is already installed');
     console.log(this.alreadyInstalledEvent);
   }
 
@@ -124,6 +124,7 @@ export class PwaService implements OnDestroy {
   // Called when the service worker receives an install event
   private handleServiceWorkerInstallEvent(event: any): void {
     console.log('PWA - In handleServiceWorkerInstallEvent');
+    console.log(event);
     event.waitUntil(
       caches.open('v1').then(function(cache) {
         console.log('PWA - Caching custom resources for the service worker');
@@ -139,6 +140,7 @@ export class PwaService implements OnDestroy {
   // Listening to the fetch event is a prerequisite to receiving the beforeinstallprompt event from the browser
   private handleServiceWorkerFetchEvent(event: any): void {
     console.log('PWA - In handleServiceWorkerFetchEvent');
+    console.log(event);
     event.respondWith(
       caches.match(event.request).then(function(response) {
         if (response) {
@@ -177,8 +179,9 @@ export class PwaService implements OnDestroy {
 
   private openBottomSheet(bottomSheetRef: MatBottomSheetRef): void {
     this.afterDismissedSubscription = bottomSheetRef.afterDismissed()
-    .subscribe(() => {
+    .subscribe((data: any) => {
       console.log('PWA - The bottom sheet has been dismissed.');
+      console.log(data);
     });
   }
 
