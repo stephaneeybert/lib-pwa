@@ -11,6 +11,7 @@ npm run package;
 
 # Publish the library
 npm publish ./dist/lib-pwa/stephaneeybert-lib-pwa-
+ng-version-sync-parent
 
 # In the client application
 npm install ng-environmenter
