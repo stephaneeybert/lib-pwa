@@ -106,7 +106,7 @@ export class PwaService implements OnDestroy {
       take(1)
     )
     .subscribe(() => {
-      if (this.isInstallable() && this.isDisplayedAutomatically()) {
+      if (this.isInstallable() && this.isOfferedAutomaticallyForInstallation()) {
         this.displayPwaInstallPrompt(i18nCancel, i18nInstall, i18nIOSInstructions);
       }
     });
@@ -193,17 +193,17 @@ export class PwaService implements OnDestroy {
     return matchMedia('(display-mode: standalone)').matches;
   }
 
-  public isPromptableForInstallation$(): Observable<boolean> {
+  public isNotAutomaticallyOfferedForInstallation$(): Observable<boolean> {
     return interval(CHECK_FOR_INSTALL_DELAY)
       .pipe(
         take(3),
         map((value: number) => {
-          return this.isInstallable() && !this.isDisplayedAutomatically();
+          return this.isInstallable() && !this.isOfferedAutomaticallyForInstallation();
         })
       );
   }
 
-  private isDisplayedAutomatically(): boolean {
+  private isOfferedAutomaticallyForInstallation(): boolean {
     return this.environmenter.getGlobalEnvironment().environment.pwaInstallPromptAutoDisplay;
   }
 
