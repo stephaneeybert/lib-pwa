@@ -4,7 +4,7 @@ import { Subject, Subscription } from 'rxjs';
 import { ScreenDeviceService } from '@stephaneeybert/lib-core';
 
 @Directive({
-  selector: '[appPwaPrompt]' // TODO Why the brackets are not used by the client app ?
+  selector: '[appPwaPrompt]'
 })
 export class PwaPromptDirective implements OnInit, OnDestroy {
 
