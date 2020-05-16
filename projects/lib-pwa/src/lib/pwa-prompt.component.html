@@ -1,4 +1,7 @@
 <div class="soft-theme">
+  <mat-toolbar>
+    {{ i18nQuestion }}
+  </mat-toolbar>
   <mat-toolbar *ngIf="data.mobileType === 'android'">
     <button mat-flat-button (click)="cancel()">
       {{ i18nCancel }}

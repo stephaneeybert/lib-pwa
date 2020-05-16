@@ -8,6 +8,7 @@ import { ScreenDeviceService } from '@stephaneeybert/lib-core';
 })
 export class PwaPromptDirective implements OnInit, OnDestroy {
 
+  @Input() i18nQuestion: string = '';
   @Input() i18nCancel: string = '';
   @Input() i18nInstall: string = '';
   @Input() i18nIOSInstructions: string = '';
@@ -28,7 +29,7 @@ export class PwaPromptDirective implements OnInit, OnDestroy {
     // Handle a click on the element containing the directive
     this.clickSubscription = this.clicks
     .subscribe((event: any) => {
-      this.pwaService.displayPwaInstallPrompt(this.i18nCancel, this.i18nInstall, this.i18nIOSInstructions);
+      this.pwaService.displayPwaInstallPrompt(this.i18nQuestion, this.i18nCancel, this.i18nInstall, this.i18nIOSInstructions);
     });
   }
 

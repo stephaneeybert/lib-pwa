@@ -4,6 +4,7 @@ import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bott
 type matBottomSheetDataType = {
   mobileType: 'ios' | 'android',
   promptEvent: any,
+  i18nQuestion: string,
   i18nCancel: string,
   i18nInstall: string,
   i18nIOSInstructions: string
@@ -21,6 +22,7 @@ type UserChoice = {
 })
 export class PwaPromptComponent implements OnInit {
 
+  i18nQuestion?: string;
   i18nCancel?: string;
   i18nInstall?: string;
   i18nIOSInstructions?: string;
@@ -32,6 +34,7 @@ export class PwaPromptComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
+    this.i18nQuestion = this.data.i18nQuestion;
     this.i18nCancel = this.data.i18nCancel;
     this.i18nInstall = this.data.i18nInstall;
     this.i18nIOSInstructions = this.data.i18nIOSInstructions;

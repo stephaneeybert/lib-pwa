@@ -56,18 +56,18 @@ export class PwaService implements OnDestroy {
     self.removeEventListener('fetch', this.handleServiceWorkerFetchEvent);
   }
 
-  public displayPwaInstallPrompt(i18nCancel: string, i18nInstall: string, i18nIOSInstructions: string) {
+  public displayPwaInstallPrompt(i18nQuestion: string, i18nCancel: string, i18nInstall: string, i18nIOSInstructions: string) {
     if (this.platform.ANDROID) {
       if (!this.isInStandaloneModeAndroid()) {
         console.log('PWA - Opening the propt install on Android');
-        const matBottomSheet: MatBottomSheetRef = this.createBottomSheet(PLATFORM_ANDROID, i18nCancel, i18nInstall, '');
+        const matBottomSheet: MatBottomSheetRef = this.createBottomSheet(PLATFORM_ANDROID, i18nQuestion, i18nCancel, i18nInstall, '');
         this.openBottomSheet(matBottomSheet);
       }
     } else if (this.platform.IOS) {
       if (!this.isInStandaloneModeIOS()) {
         // Prevent the installation prompt when the app is already installed
         console.log('PWA - Opening the propt install on iOS');
-        const matBottomSheet: MatBottomSheetRef = this.createBottomSheet(PLATFORM_IOS, i18nCancel, '', i18nIOSInstructions);
+        const matBottomSheet: MatBottomSheetRef = this.createBottomSheet(PLATFORM_IOS, i18nQuestion, i18nCancel, '', i18nIOSInstructions);
         this.openBottomSheet(matBottomSheet);
       }
     } else {
@@ -100,14 +100,14 @@ export class PwaService implements OnDestroy {
     this.installPromptEvent = event;
   }
 
-  public autoDisplayPwaInstallPrompt(i18nCancel: string, i18nInstall: string, i18nIOSInstructions: string): void {
+  public autoDisplayPwaInstallPrompt(i18nQuestion: string, i18nCancel: string, i18nInstall: string, i18nIOSInstructions: string): void {
     this.pwaPromptForInstallSubscription = timer(OFFER_TO_INSTALL_DELAY)
     .pipe(
       take(1)
     )
     .subscribe(() => {
       if (this.isInstallable() && this.isOfferedAutomaticallyForInstallation()) {
-        this.displayPwaInstallPrompt(i18nCancel, i18nInstall, i18nIOSInstructions);
+        this.displayPwaInstallPrompt(i18nQuestion, i18nCancel, i18nInstall, i18nIOSInstructions);
       }
     });
   }
@@ -160,16 +160,21 @@ export class PwaService implements OnDestroy {
   }
 
   public fakeBottomSheet(): void {
-    const matBottomSheet: MatBottomSheetRef = this.createBottomSheet(PLATFORM_ANDROID, 'CANCEL', 'INSTALL', 'To install this web app on your device, tap the Menu button and the \'Add to Home screen\' button');
+    const i18nQuestion: string = 'Install on the device ?';
+    const i18nCancel: string = 'CANCEL';
+    const i18nInstall: string = 'INSTALL';
+    const i18nIOSInstructions: string = "To install this web app on your device, tap the Menu button and the 'Add to Home screen' button";
+    const matBottomSheet: MatBottomSheetRef = this.createBottomSheet(PLATFORM_ANDROID, i18nQuestion, i18nCancel, i18nInstall, i18nIOSInstructions);
     this.openBottomSheet(matBottomSheet);
   }
 
-  private createBottomSheet(mobilePlatform: 'ios' | 'android', i18nCancel: string, i18nInstall: string, i18nIOSInstructions: string): MatBottomSheetRef {
+  private createBottomSheet(mobilePlatform: 'ios' | 'android', i18nQuestion: string, i18nCancel: string, i18nInstall: string, i18nIOSInstructions: string): MatBottomSheetRef {
     return this.matBottomSheet.open(PwaPromptComponent, {
       ariaLabel: '', // TODO I'm not sure this label is actually used
       data: {
         mobileType: mobilePlatform,
         promptEvent: this.installPromptEvent,
+        i18nQuestion: i18nQuestion,
         i18nCancel: i18nCancel,
         i18nInstall: i18nInstall,
         i18nIOSInstructions: i18nIOSInstructions
