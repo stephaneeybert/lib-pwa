@@ -10,7 +10,7 @@
   </mat-toolbar>
 
   <div *ngIf="data.mobileType === 'ios'" class="ios-prompt">
-    <button mat-stroked-button class="close-ios-inv" (click)="cancel()">
+    <button mat-flat-button class="close-ios-inv" (click)="cancel()">
       {{ i18nCancel }}
     </button>
     <div>{{ i18nIOSInstructions }}</div>
