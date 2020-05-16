@@ -16,4 +16,8 @@ export class AppComponent implements OnInit {
     this.pwaService.fakeBottomSheet();
   }
 
+  getAppTheme(): string {
+    return 'app-light-theme';
+  }
+
 }
