@@ -9,9 +9,11 @@ cd ../../;
 # Build the library
 npm run package;
 
+# Sync the workspace version to the library project one
+ng-version-sync-parent;
+
 # Publish the library
 npm publish ./dist/lib-pwa/stephaneeybert-lib-pwa-
-ng-version-sync-parent
 
 # In the client application
 npm install ng-environmenter
