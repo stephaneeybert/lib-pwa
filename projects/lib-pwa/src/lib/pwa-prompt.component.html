@@ -1,6 +1,6 @@
 <div class="soft-theme">
-  <mat-toolbar color="primary" *ngIf="data.mobileType === 'android'">
-    <button mat-flat-button color="" (click)="cancel()">
+  <mat-toolbar *ngIf="data.mobileType === 'android'">
+    <button mat-flat-button (click)="cancel()">
       {{ i18nCancel }}
     </button>
     <span class="fill-remaining-space"></span>
