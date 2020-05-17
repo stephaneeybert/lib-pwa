@@ -186,7 +186,6 @@ export class PwaService implements OnDestroy {
     this.afterDismissedSubscription = bottomSheetRef.afterDismissed()
     .subscribe((data: any) => {
       console.log('PWA - The bottom sheet has been dismissed.');
-      console.log(data);
     });
   }
 
