@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 
-type matBottomSheetDataType = {
+type MatBottomSheetDataType = {
   mobileType: 'ios' | 'android',
   promptEvent: any,
   i18nQuestion: string,
@@ -29,7 +29,7 @@ export class PwaPromptComponent implements OnInit {
 
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA) private ariaLabel: string, // TODO
-    @Inject(MAT_BOTTOM_SHEET_DATA) public data: matBottomSheetDataType,
+    @Inject(MAT_BOTTOM_SHEET_DATA) public data: MatBottomSheetDataType,
     private matBottomSheetRef: MatBottomSheetRef<PwaPromptComponent>
   ) { }
 
