@@ -1,6 +1,6 @@
 # LibPwa
 
-# Bump the version
+# Bump the library project version
 cd projects/lib-pwa/;
 npm version patch;
 cd ../../;
