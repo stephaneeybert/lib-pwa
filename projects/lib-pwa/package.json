@@ -1,6 +1,6 @@
 {
   "name": "@stephaneeybert/lib-pwa",
-  "version": "0.1.33",
+  "version": "0.1.34",
   "description": "The lib-pwa Angular library",
   "keywords": [
     "Angular",
@@ -14,21 +14,22 @@
   },
   "homepage": "https://github.com/stephaneeyber/lib-pwa#readme",
   "peerDependencies": {
-    "@angular/animations": "~9.1.0",
-    "@angular/cdk": "^9.2.2",
-    "@angular/common": "~9.1.0",
-    "@angular/compiler": "~9.1.0",
-    "@angular/core": "~9.1.0",
-    "@angular/forms": "~9.1.0",
-    "@angular/material": "^9.2.2",
-    "@angular/platform-browser": "~9.1.0",
-    "@angular/platform-browser-dynamic": "~9.1.0",
-    "@angular/router": "~9.1.0",
-    "@angular/service-worker": "~9.1.0",
-    "@stephaneeybert/lib-core": "^0.1.0",
+    "@angular/animations": "~11.0.1",
+    "@angular/common": "~11.0.1",
+    "@angular/compiler": "~11.0.1",
+    "@angular/core": "~11.0.1",
+    "@angular/forms": "~11.0.1",
+    "@angular/platform-browser": "~11.0.1",
+    "@angular/platform-browser-dynamic": "~11.0.1",
+    "@angular/router": "~11.0.1",
+    "rxjs": "~6.6.0",
+    "tslib": "^2.0.0",
+    "zone.js": "~0.10.2",
+
+    "@angular/cdk": "^11.0.0",
+    "@angular/material": "^11.0.0",
+    "@angular/service-worker": "~11.0.1",
     "ng-environmenter": "^0.1.2",
-    "rxjs": "~6.5.4",
-    "tslib": "^1.10.0",
-    "zone.js": "~0.10.2"
+    "@stephaneeybert/lib-core": "^0.1.58"
   }
 }
