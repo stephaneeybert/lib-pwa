@@ -4,7 +4,6 @@
 cd projects/lib-pwa/;
 npm version patch;
 cd ../../;
-# TODO Do I need to copy the version number in the parent package.json file as well ?
 
 # Build the library
 npm run package;
