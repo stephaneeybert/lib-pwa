@@ -222,7 +222,7 @@ export class PwaService implements OnDestroy {
   }
 
   private isInStandaloneModeIOS(): boolean {
-    return ('standalone' in window.navigator) && (window.navigator['standalone']);
+    return (window.matchMedia('(display-mode: standalone)').matches);
   }
 
   public checkForAppUpdate(i18nNewVersionAvailable: string): void {
