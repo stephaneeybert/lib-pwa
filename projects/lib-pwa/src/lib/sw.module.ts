@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { ServiceWorkerModule, SwRegistrationOptions } from '@angular/service-worker';
-import { Environmenter, EnvironmenterModule } from 'ng-environmenter';
 
-function serviceWorkerFactory(environmenter: Environmenter): SwRegistrationOptions {
-  const isProduction: boolean = environmenter.getGlobalEnvironment().environment.production;
+function serviceWorkerFactory(environment: any): SwRegistrationOptions {
+  const isProduction: boolean = environment.production;
   return ({
     enabled: isProduction
   });
@@ -11,14 +10,13 @@ function serviceWorkerFactory(environmenter: Environmenter): SwRegistrationOptio
 
 @NgModule({
   imports: [
-    ServiceWorkerModule.register('ngsw-worker.js'),
-    EnvironmenterModule
+    ServiceWorkerModule.register('ngsw-worker.js')
   ],
   providers: [
     {
       provide: SwRegistrationOptions,
       useFactory: serviceWorkerFactory,
-      deps: [Environmenter]
+      deps: []
     }
   ]
 })
