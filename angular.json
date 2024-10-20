@@ -173,6 +173,5 @@
   },
   "cli": {
     "analytics": "15c4e48b-3e69-4f4c-9f7f-dd6cad1b1767"
-  },
-  "defaultProject": "lib-pwa"
+  }
 }
