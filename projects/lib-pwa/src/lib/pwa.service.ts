@@ -6,17 +6,19 @@ import { take, map } from 'rxjs/operators';
 import { SwUpdate } from '@angular/service-worker';
 import { PwaPromptComponent } from './pwa-prompt.component';
 import { ScreenDeviceService } from '@stephaneeybert/lib-core';
-import { Environmenter } from 'ng-environmenter';
 
 const CHECK_FOR_INSTALL_DELAY: number = 5000;
 const OFFER_TO_INSTALL_DELAY: number = 15000;
 const PLATFORM_ANDROID: 'android' = 'android';
 const PLATFORM_IOS: 'ios' = 'ios';
+const SW_UPDATE_VERSION_READY: string = 'VERSION_READY';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PwaService implements OnDestroy {
+
+  private environment: any;
 
   private installPromptEvent?: Event;
   private alreadyInstalledEvent?: Event;
@@ -32,7 +34,6 @@ export class PwaService implements OnDestroy {
     private platform: Platform,
     private swUpdate: SwUpdate,
     private screenDeviceService: ScreenDeviceService,
-    private environmenter: Environmenter
   ) {
     if (pwaService) {
       throw new Error('The PWA service has ALREADY been injected.');
@@ -54,6 +55,10 @@ export class PwaService implements OnDestroy {
     window.removeEventListener('appinstalled', this.handleAlreadyInstalledAndroid);
     self.removeEventListener('install', this.handleServiceWorkerInstallEvent);
     self.removeEventListener('fetch', this.handleServiceWorkerFetchEvent);
+  }
+
+  public setEnvironment(environment: any) {
+    this.environment = environment;
   }
 
   public displayPwaInstallPrompt(i18nQuestion: string, i18nCancel: string, i18nInstall: string, i18nIOSInstructions: string) {
@@ -208,7 +213,11 @@ export class PwaService implements OnDestroy {
   }
 
   private isOfferedAutomaticallyForInstallation(): boolean {
-    return this.environmenter.getGlobalEnvironment().environment.pwaInstallPromptAutoDisplay;
+    if (this.environment) {
+      return this.environment.pwaInstallPromptAutoDisplay;
+    } else {
+      throw new Error('Set the environment using the setEnvironment setter before accessing the environment variables');
+    }
   }
 
   private isInstallable(): boolean {
@@ -227,9 +236,9 @@ export class PwaService implements OnDestroy {
 
   public checkForAppUpdate(i18nNewVersionAvailable: string): void {
     if (this.swUpdate.isEnabled) {
-      this.pwaCheckForUpdateSubscription = this.swUpdate.available
-      .subscribe(() => {
-        if (confirm(i18nNewVersionAvailable)) {
+      this.pwaCheckForUpdateSubscription = this.swUpdate.versionUpdates
+      .subscribe((event) => {
+        if (event.type === SW_UPDATE_VERSION_READY && confirm(i18nNewVersionAvailable)) {
           this.screenDeviceService.reloadPage();
         }
       });

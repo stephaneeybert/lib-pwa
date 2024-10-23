@@ -15,7 +15,6 @@ ng-version-sync-parent;
 npm publish ./dist/lib-pwa/stephaneeybert-lib-pwa-
 
 # Install the dependencies in the client application
-npm install ng-environmenter
 npm install @stephaneeybert/lib-pwa@latest
 
 # Serve again the client application
